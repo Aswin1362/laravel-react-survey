@@ -1,21 +1,37 @@
 import React from "react";
+import PageComponent from "../components/PageComponent";
+import { useStateContext } from "../contexts/contextProvider";
+import SurveyListItem from "../components/SurveyListItem";
+import TButton from "../components/core/TButton";
+import { PlusCircleIcon } from "@heroicons/react/24/outline";
 
 const Surveys = () => {
+  const { surveys } = useStateContext();
+
+  const onDeleteClick = () => {
+    console.log("On delete click");
+  };
+
   return (
-    <>
-      <header className="bg-white shadow-sm">
-        <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-          <h1 className="text-3xl font-bold tracking-tight text-gray-900">
-            Surveys
-          </h1>
-        </div>
-      </header>
-      <main>
-        <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-          {/* Your content */}
-        </div>
-      </main>
-    </>
+    <PageComponent
+      title="Surveys"
+      buttons={
+        <TButton to="/surveys/create" color="green">
+          <PlusCircleIcon className="h-6 w-6 mr-2" />
+          Create new
+        </TButton>
+      }
+    >
+      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3">
+        {surveys.map((survey) => (
+          <SurveyListItem
+            survey={survey}
+            key={survey.id}
+            onDeleteClick={onDeleteClick}
+          />
+        ))}
+      </div>
+    </PageComponent>
   );
 };
 
