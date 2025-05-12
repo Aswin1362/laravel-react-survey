@@ -11,12 +11,12 @@ const StateContext = createContext({
 const tmpSurveys = [
   {
     id: 1,
-    image_url: "https://api.yoursurveys.xyz/images/vJutXzn02CDwdOyh.png",
-    title: "TheCodeholic YouTube channel",
-    slug: "thecodeholic-youtube-channel",
+    image_url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlGmKtrnxElpqw3AExKXPWWBulcwjlvDJa1Q&s",
+    title: "About me",
+    slug: "aswin-warrier",
     status: true,
     description:
-      "My name is Zura.<br>I am Web Developer with 9+ years of experience, free educational content creator, CTO, Lecturer and father of two wonderful daughters.<br><br>The purpose of the channel is to share my several years of experience with beginner developers.<br>Teach them what I know and make my experience as a lesson for others.",
+      "My name is Aswin.<br>I am Web Developer with 1+ years of experience",
     created_at: "2022-01-07 13:23:41",
     updated_at: "2022-01-18 16:34:19",
     expire_date: "2022-01-23",
@@ -159,7 +159,7 @@ const tmpSurveys = [
   },
   {
     id: 2,
-    image_url: "https://api.yoursurveys.xyz/images/gjIHElz4aKrL0nT0.png",
+    image_url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlGmKtrnxElpqw3AExKXPWWBulcwjlvDJa1Q&s",
     title: "React",
     slug: "react",
     status: true,
@@ -172,9 +172,9 @@ const tmpSurveys = [
   },
   {
     id: 3,
-    image_url: "https://api.yoursurveys.xyz/images/WPfzo0g66huUYYwR.png",
-    title: "Laravel 9",
-    slug: "laravel-9",
+    image_url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQZzLgEDBplLOYilTBC0y3pPnGQ-LV0SXZFno0-1Hts7Lb8xyjhk0aGrY0&s",
+    title: "Laravel 12",
+    slug: "laravel-12",
     status: true,
     description:
       "Laravel is a web application framework with expressive, elegant syntax. We\u2019ve already laid the foundation \u2014 freeing you to create without sweating the small things.",

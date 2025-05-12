@@ -3,8 +3,11 @@ import PageComponent from "../components/PageComponent";
 import TButton from "../components/core/TButton";
 import { PhotoIcon } from "@heroicons/react/24/outline";
 import axiosClient from "../api/axiosClient";
+import { useNavigate } from "react-router";
+import { SurveyQuestions } from "../components/SurveyQuestions";
 
 export default function SurveyView() {
+  const navigate = useNavigate();
   const [survey, setSurvey] = useState({
     title: "",
     slug: "",
@@ -15,20 +18,55 @@ export default function SurveyView() {
     expire_date: "",
     questions: [],
   });
+  const [error, setError] = useState("");
+  const [fieldErrors, setFieldErrors] = useState({
+    title: "",
+    expire_date: "",
+  });
 
-  const onImageChoose = () => {
-    console.log("On image choose");
+  const onImageChoose = (e) => {
+    const file = e.target.files[0];
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      setSurvey({
+        ...survey,
+        image: file,
+        image_url: reader.result,
+      });
+
+      e.target.value = "";
+    };
+
+    reader.readAsDataURL(file);
   };
 
   const onSubmit = (e) => {
     e.preventDefault();
-    axiosClient.post("/survey", {
-      title: "Lorem Ipsum",
-      description: "Test",
-      expire_date: "2025-05-04",
-      status: true,
-      questions: []
-    });
+
+    const payload = { ...survey };
+    if (payload.image) {
+      payload.image = payload.image_url;
+    }
+    delete payload.image_url;
+
+    axiosClient
+      .post("/survey", payload)
+      .then((response) => {
+        console.log(response);
+        navigate("/surveys");
+      })
+      .catch((error) => {
+        if (error && error.response) {
+          setError(error.response.data.message);
+          setFieldErrors(error.response.data.errors);
+        }
+        console.log(error, error.response);
+      });
+  };
+
+  const onSurveyUpdate = (survey) => {
+    setSurvey({ ...survey });
   };
 
   return (
@@ -36,6 +74,11 @@ export default function SurveyView() {
       <form action="#" method="POST" onSubmit={onSubmit}>
         <div className="shadow sm:overflow-hidden sm:rounded-md">
           <div className="space-y-6 bg-white px-4 py-5 sm:p-6">
+            {error && (
+              <div className="bg-red-500 text-white rounded-lg px-3 py-3">
+                {error}
+              </div>
+            )}
             {/*Image*/}
             <div>
               <label className="block text-sm font-medium text-gray-700">
@@ -86,8 +129,17 @@ export default function SurveyView() {
                   setSurvey({ ...survey, title: ev.target.value })
                 }
                 placeholder="Survey Title"
-                className="mt-1 block px-3 py-3 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                className={`mt-1 block px-3 py-3 w-full rounded-md shadow-sm sm:text-sm ${
+                  fieldErrors.title
+                    ? "border border-red-500 focus:border-red-500 focus:ring-red-500"
+                    : "border border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
+                }`}
               />
+              {fieldErrors.title && (
+                <p className="mt-1 text-sm text-red-600">
+                  {fieldErrors.title[0]}
+                </p>
+              )}
             </div>
             {/*Title*/}
 
@@ -108,7 +160,7 @@ export default function SurveyView() {
                   setSurvey({ ...survey, description: ev.target.value })
                 }
                 placeholder="Describe your survey"
-                className="mt-1 block px-3 py-3 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                className="mt-1 block px-3 py-3 w-full rounded-md shadow-sm sm:text-sm border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
               ></textarea>
             </div>
             {/*Description*/}
@@ -129,8 +181,17 @@ export default function SurveyView() {
                 onChange={(ev) =>
                   setSurvey({ ...survey, expire_date: ev.target.value })
                 }
-                className="mt-1 block px-3 py-3 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                className={`mt-1 block px-3 py-3 w-full rounded-md shadow-sm sm:text-sm ${
+                  fieldErrors.expire_date
+                    ? "border border-red-500 focus:border-red-500 focus:ring-red-500"
+                    : "border border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
+                }`}
               />
+              {fieldErrors.expire_date && (
+                <p className="mt-1 text-sm text-red-600">
+                  {fieldErrors.expire_date[0]}
+                </p>
+              )}
             </div>
             {/*Expire Date*/}
 
@@ -158,6 +219,7 @@ export default function SurveyView() {
               </div>
             </div>
             {/*Active*/}
+            <SurveyQuestions survey={survey} onSurveyUpdate={onSurveyUpdate} />
           </div>
           <div className="bg-gray-50 px-4 py-3 text-right sm:px-6">
             <TButton>Save</TButton>
