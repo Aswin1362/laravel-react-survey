@@ -1,4 +1,3 @@
-import React from "react";
 import TButton from "./core/TButton";
 import {
   ArrowTopRightOnSquareIcon,

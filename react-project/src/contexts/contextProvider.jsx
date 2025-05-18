@@ -4,6 +4,7 @@ const StateContext = createContext({
   currentUser: {},
   userToken: null,
   surveys: [],
+  questionTypes: [],
   setCurrentUser: () => {},
   setUserToken: () => {},
 });
@@ -11,7 +12,8 @@ const StateContext = createContext({
 const tmpSurveys = [
   {
     id: 1,
-    image_url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlGmKtrnxElpqw3AExKXPWWBulcwjlvDJa1Q&s",
+    image_url:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlGmKtrnxElpqw3AExKXPWWBulcwjlvDJa1Q&s",
     title: "About me",
     slug: "aswin-warrier",
     status: true,
@@ -159,7 +161,8 @@ const tmpSurveys = [
   },
   {
     id: 2,
-    image_url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlGmKtrnxElpqw3AExKXPWWBulcwjlvDJa1Q&s",
+    image_url:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlGmKtrnxElpqw3AExKXPWWBulcwjlvDJa1Q&s",
     title: "React",
     slug: "react",
     status: true,
@@ -172,7 +175,8 @@ const tmpSurveys = [
   },
   {
     id: 3,
-    image_url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQZzLgEDBplLOYilTBC0y3pPnGQ-LV0SXZFno0-1Hts7Lb8xyjhk0aGrY0&s",
+    image_url:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQZzLgEDBplLOYilTBC0y3pPnGQ-LV0SXZFno0-1Hts7Lb8xyjhk0aGrY0&s",
     title: "Laravel 12",
     slug: "laravel-12",
     status: true,
@@ -191,6 +195,13 @@ export default function ContextProvider({ children }) {
     localStorage.getItem("TOKEN") || ""
   );
   const [surveys, setSurveys] = useState(tmpSurveys);
+  const [questionTypes] = useState([
+    "text",
+    "radio",
+    "select",
+    "checkbox",
+    "textarea",
+  ]);
 
   const setUserToken = (token) => {
     if (token) {
@@ -207,6 +218,7 @@ export default function ContextProvider({ children }) {
         currentUser,
         userToken,
         surveys,
+        questionTypes,
         setCurrentUser,
         setUserToken,
       }}

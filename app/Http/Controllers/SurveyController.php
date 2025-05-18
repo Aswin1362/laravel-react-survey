@@ -29,7 +29,7 @@ class SurveyController extends Controller
         return SurveyResource::collection(
             Survey::where('user_id', $user->id)
                 ->orderBy('created_at', 'desc')
-                ->paginate(10)
+                ->paginate(6)
         );
     }
 
@@ -48,7 +48,7 @@ class SurveyController extends Controller
         $survey = Survey::create($data);
 
         foreach ($data['questions'] as $question) {
-            $data['survey_id'] = $survey->id;
+            $question['survey_id'] = $survey->id;
             $this->createQuestions($question);
         }
 

@@ -62,4 +62,9 @@ class AuthController extends Controller
             'success' => true
         ]);
     }
+
+    public function getAuthUserDetails(Request $request)
+    {
+        return $request->user();
+    }
 }

@@ -1,16 +1,38 @@
-import React from "react";
 import PageComponent from "../components/PageComponent";
-import { useStateContext } from "../contexts/contextProvider";
 import SurveyListItem from "../components/SurveyListItem";
 import TButton from "../components/core/TButton";
 import { PlusCircleIcon } from "@heroicons/react/24/outline";
+import { useEffect, useState } from "react";
+import axiosClient from "../api/axiosClient";
+import PaginationLinks from "../components/PaginationLinks";
 
 const Surveys = () => {
-  const { surveys } = useStateContext();
+  const [surveys, setSurveys] = useState([]);
+  const [meta, setMeta] = useState({});
+  const [loading, setLoading] = useState();
 
   const onDeleteClick = () => {
     console.log("On delete click");
   };
+
+  const onPageClick = (link) => {
+    getSurveys(link.url);
+  };
+
+  const getSurveys = (url) => {
+    url = url || "/survey";
+
+    setLoading(true);
+    axiosClient.get(url).then(({ data }) => {
+      setSurveys(data.data);
+      setMeta(data.meta);
+      setLoading(false);
+    });
+  };
+
+  useEffect(() => {
+    getSurveys();
+  }, []);
 
   return (
     <PageComponent
@@ -22,15 +44,21 @@ const Surveys = () => {
         </TButton>
       }
     >
-      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3">
-        {surveys.map((survey) => (
-          <SurveyListItem
-            survey={survey}
-            key={survey.id}
-            onDeleteClick={onDeleteClick}
-          />
-        ))}
-      </div>
+      {loading && <div className="text-center">Loading...</div>}
+      {!loading && (
+        <div>
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3">
+            {surveys.map((survey) => (
+              <SurveyListItem
+                survey={survey}
+                key={survey.id}
+                onDeleteClick={onDeleteClick}
+              />
+            ))}
+          </div>
+          <PaginationLinks meta={meta} onPageClick={onPageClick} />
+        </div>
+      )}
     </PageComponent>
   );
 };

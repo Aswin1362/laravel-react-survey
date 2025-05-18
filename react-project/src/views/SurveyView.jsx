@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import PageComponent from "../components/PageComponent";
 import TButton from "../components/core/TButton";
 import { PhotoIcon } from "@heroicons/react/24/outline";
 import axiosClient from "../api/axiosClient";
 import { useNavigate } from "react-router";
 import { SurveyQuestions } from "../components/SurveyQuestions";
+import { v4 as uuidv4 } from "uuid";
 
 export default function SurveyView() {
   const navigate = useNavigate();
@@ -65,7 +66,18 @@ export default function SurveyView() {
       });
   };
 
-  const onSurveyUpdate = (survey) => {
+  const onQuestionUpdate = (questions) => {
+    setSurvey({ ...survey, questions });
+  };
+
+  const addQuestion = () => {
+    survey.questions.push({
+      id: uuidv4(),
+      type: "text",
+      question: "",
+      description: "",
+      data: {},
+    });
     setSurvey({ ...survey });
   };
 
@@ -219,7 +231,13 @@ export default function SurveyView() {
               </div>
             </div>
             {/*Active*/}
-            <SurveyQuestions survey={survey} onSurveyUpdate={onSurveyUpdate} />
+            <button type="button" onClick={addQuestion}>
+              Add Questions
+            </button>
+            <SurveyQuestions
+              questions={survey.questions}
+              onQuestionUpdate={onQuestionUpdate}
+            />
           </div>
           <div className="bg-gray-50 px-4 py-3 text-right sm:px-6">
             <TButton>Save</TButton>
